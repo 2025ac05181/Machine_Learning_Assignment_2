@@ -1,0 +1,31 @@
+{
+  "numeric_features": [
+    "duration_months",
+    "credit_amount",
+    "installment_rate_pct",
+    "present_residence_since",
+    "age_years",
+    "existing_credits_count",
+    "num_dependents"
+  ],
+  "categorical_features": [
+    "checking_account_status",
+    "credit_history",
+    "purpose",
+    "savings_account",
+    "employment_since",
+    "personal_status_sex",
+    "other_debtors_guarantors",
+    "property",
+    "other_installment_plans",
+    "housing",
+    "job",
+    "telephone",
+    "foreign_worker"
+  ],
+  "target_col": "credit_risk",
+  "positive_label": "Bad",
+  "model_files": {
+    "Logistic Regression": "logistic_regression.joblib"
+  }
+}

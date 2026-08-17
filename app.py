@@ -1,4 +1,13 @@
+import json
+import joblib
+import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import (
+    accuracy_score, classification_report, confusion_matrix,
+    f1_score, matthews_corrcoef, precision_score, recall_score, roc_auc_score
+)
 
 # Page Setup
 st.set_page_config(
@@ -97,4 +106,75 @@ if uploaded_file is None:
     st.stop()
 else:
     st.success(f"File '{uploaded_file.name}' successfully loaded into memory!.")
+    # Removed st.stop() here so the script can proceed to evaluation
+
+ 
+# Load config from the newly defined data folder
+with open("data/Feature_Config.json") as f:
+    config = json.load(f)
+        
+TARGET_COL = config["target_col"]
+POSITIVE_LABEL = config["positive_label"]
+    
+# Load model artifact
+model_path = f"model/{config['model_files'][selected_model_name]}"
+lr_model = joblib.load(model_path)
+# Ingest data
+data = pd.read_csv(uploaded_file)
+
+if TARGET_COL not in data.columns:
+    st.error(f"Missing target column: '{TARGET_COL}' in the uploaded file.")
     st.stop()
+
+X = data.drop(columns=[TARGET_COL])
+y_true = (data[TARGET_COL] == POSITIVE_LABEL).astype(int)
+
+# Generate predictions
+y_pred = lr_model.predict(X)
+y_proba = lr_model.predict_proba(X)[:, 1]
+
+# Compile metrics
+metrics = {
+    "Accuracy": accuracy_score(y_true, y_pred),
+    "AUC Score": roc_auc_score(y_true, y_proba),
+    "Precision": precision_score(y_true, y_pred, zero_division=0),
+    "Recall": recall_score(y_true, y_pred, zero_division=0),
+    "F1 Score": f1_score(y_true, y_pred, zero_division=0),
+    "MCC Score": matthews_corrcoef(y_true, y_pred),
+}
+    
+st.subheader(f"Classifier Audit Results: Logistic Regression")
+    
+# Render metric headers
+col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
+cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
+for col, (m_title, val) in zip(cols, metrics.items()):
+    col.metric(m_title, f"{val:.4f}")
+
+st.markdown("---")
+
+# Render visualizations
+col_viz1, col_viz2 = st.columns([1, 1.2])
+
+with col_viz1:
+    st.markdown("#### Confusion Matrix")
+    cm = confusion_matrix(y_true, y_pred)
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
+    sns.heatmap(
+        cm, annot=True, fmt="d", cmap="Blues", cbar=False,
+        xticklabels=["Predicted Good", "Predicted Bad"],
+        yticklabels=["Actual Good", "Actual Bad"], ax=ax
+    )
+    plt.tight_layout()
+    st.pyplot(fig)
+
+with col_viz2:
+    st.markdown("#### Full Classification Report")
+    report_dict = classification_report(
+        y_true, y_pred, target_names=["Good Risk", "Bad Risk"], output_dict=True, zero_division=0
+    )
+    report_df = pd.DataFrame(report_dict).transpose().round(3)
+    st.dataframe(
+        report_df.style.background_gradient(cmap="Blues", axis=0),
+        use_container_width=True
+    )
