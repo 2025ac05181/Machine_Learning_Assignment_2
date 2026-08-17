@@ -87,10 +87,6 @@ with ctrl_col2:
         "2. Select Classifier for Audit", 
         model_names
     )
-
-st.caption(
-    "🔒 **Environment Note:** Currently running in UI-Only Deployment Mode. All backend logic is temporarily disabled."
-)
 st.markdown("---")
 
 # ---------------------------------------------------------------------------

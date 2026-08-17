@@ -28,9 +28,11 @@ This project utilizes the **Statlog (German Credit Data)** dataset to serve as t
 | **Preprocessing**  | Numeric features are standardized (`StandardScaler`); categorical features are one-hot encoded (`OneHotEncoder`). Both steps are wrapped into a single `sklearn.Pipeline` per model so the exact training-time preprocessing is automatically re-applied at inference time.                                 |
 | **Data Splitting** | Stratified 80/20 train/test split (800 train / 200 test, `random_state=42`). The 200-row test split is exported as `test_data.csv` and is what the Streamlit app expects to be uploaded.\*                                                                                                                  |
 
-## c. GitHub Repository Link
+## c. GitHub Repository and deployment Link
 
 **Repository Link:** [Machine Learning Assignment 2](https://github.com/2025ac05181/Machine_Learning_Assignment_2)
+
+**Deployment Link:** [Streamlit App](http://2025ac05181-ml-assignment-2.streamlit.app/)
 
 ## d. Models Used & Evaluation
 
