@@ -53,7 +53,7 @@ st.markdown("""
 model_names = [
     "Logistic Regression",
     "Decision Tree Classifier",
-    "K-Nearest Neighbor Classifier"
+    "K-Nearest Neighbor Classifier",
     "Naive Byes Classifier - Gaussian",
     "Ensemble Model - Random Forest",
 ]
