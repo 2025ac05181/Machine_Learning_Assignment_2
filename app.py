@@ -117,32 +117,6 @@ with open("data/Feature_Config.json") as f:
 TARGET_COL = config["target_col"]
 POSITIVE_LABEL = config["positive_label"]
     
-# Load model artifact
-model_path = f"model/{config['model_files'][selected_model_name]}"
-lr_model = joblib.load(model_path)
-# Ingest data
-data = pd.read_csv(uploaded_file)
-
-if TARGET_COL not in data.columns:
-    st.error(f"Missing target column: '{TARGET_COL}' in the uploaded file.")
-    st.stop()
-
-X = data.drop(columns=[TARGET_COL])
-y_true = (data[TARGET_COL] == POSITIVE_LABEL).astype(int)
-
-# Generate predictions
-y_pred = lr_model.predict(X)
-y_proba = lr_model.predict_proba(X)[:, 1]
-
-# Compile metrics
-metrics = {
-    "Accuracy": accuracy_score(y_true, y_pred),
-    "AUC Score": roc_auc_score(y_true, y_proba),
-    "Precision": precision_score(y_true, y_pred, zero_division=0),
-    "Recall": recall_score(y_true, y_pred, zero_division=0),
-    "F1 Score": f1_score(y_true, y_pred, zero_division=0),
-    "MCC Score": matthews_corrcoef(y_true, y_pred),
-}
 
 tab1, tab2 = st.tabs(["🔍 Single Model Evaluation", "📊 Compare All Models"])
     
@@ -155,6 +129,33 @@ with tab1:
             model_names
         )
     st.subheader(f"Classifier Audit Results: {selected_model_name}")
+
+    # Load model artifact
+    model_path = f"model/{config['model_files'][selected_model_name]}"
+    lr_model = joblib.load(model_path)
+    # Ingest data
+    data = pd.read_csv(uploaded_file)
+
+    if TARGET_COL not in data.columns:
+        st.error(f"Missing target column: '{TARGET_COL}' in the uploaded file.")
+        st.stop()
+
+    X = data.drop(columns=[TARGET_COL])
+    y_true = (data[TARGET_COL] == POSITIVE_LABEL).astype(int)
+
+    # Generate predictions
+    y_pred = lr_model.predict(X)
+    y_proba = lr_model.predict_proba(X)[:, 1]
+
+    # Compile metrics
+    metrics = {
+        "Accuracy": accuracy_score(y_true, y_pred),
+        "AUC Score": roc_auc_score(y_true, y_proba),
+        "Precision": precision_score(y_true, y_pred, zero_division=0),
+        "Recall": recall_score(y_true, y_pred, zero_division=0),
+        "F1 Score": f1_score(y_true, y_pred, zero_division=0),
+        "MCC Score": matthews_corrcoef(y_true, y_pred),
+    }
     # Render metric headers
     col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
     cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
