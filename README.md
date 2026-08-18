@@ -19,7 +19,7 @@ Because misclassifying default risk has severe financial implications, this proj
 
 This project utilizes the **Statlog (German Credit Data)** dataset to serve as the foundational evidence for predicting applicant creditworthiness. By analyzing a historical ledger of financial and demographic footprints, our models act as automated investigators, piecing together distinct patterns to uncover underlying default risks before a loan is approved.
 
-| Attribute          | Details                                                                                                                                                                                                                                                                                                     |
+| Attribute          |Details                                                                                                                                                                                                                                                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Source**         | [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data)                                                                                                                                                                                                       |
 | **Instances**      | 1,000 loan applicants                                                                                                                                                                                                                                                                                       |
@@ -40,13 +40,13 @@ This project utilizes the **Statlog (German Credit Data)** dataset to serve as t
 
 The following table compares the evaluation metrics for the five implemented classification models tested on the withheld `test_data.csv`.
 
-| ML Model Name                | Accuracy | AUC | Precision | Recall | F1  | MCC |
-| ---------------------------- | -------- | --- | --------- | ------ | --- | --- |
-| **Logistic Regression**      |          |     |           |        |     |     |
-| **Decision Tree**            |          |     |           |        |     |     |
-| **kNN**                      |          |     |           |        |     |     |
-| **Naive Bayes**              |          |     |           |        |     |     |
-| **Random Forest (Ensemble)** |          |     |           |        |     |     |
+| ML Model Name                | Accuracy | AUC   | Precision | Recall | F1    | MCC   |
+| ---------------------------- | -------- | ----- | --------- | ------ | ----- | ----- |
+| **Logistic Regression**      | 0.795    | 0.804 | 0.721     | 0.517  | 0.602 | 0.481 |
+| **Decision Tree**            | 0.725    | 0.686 | 0.549     | 0.467  | 0.505 | 0.318 |
+| **kNN**                      | 0.760    | 0.765 | 0.875     | 0.233  | 0.368 | 0.370 |
+| **Naive Bayes**              | 0.745    | 0.778 | 0.582     | 0.533  | 0.557 | 0.379 |
+| **Random Forest (Ensemble)** | 0.800    | 0.804 | 0.763     | 0.483  | 0.592 | 0.489 |
 
 ### Model Observations
 
