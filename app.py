@@ -65,6 +65,14 @@ st.caption(
     "Financial Intelligence & Credit Risk Audit Dashboard"
 )
 
+st.markdown(
+    """
+    ### 👨‍🎓 Student Details
+    * **Student Name:** SWAPNIL KISAN GADAVE
+    * **Bits ID:** 2025AC05181
+    """
+)
+
 with st.expander("📌 Audit System Protocol & Overview", expanded=False):
     st.markdown(
         """
