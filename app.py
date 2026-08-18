@@ -90,7 +90,7 @@ with st.expander("📌 Audit System Protocol & Overview", expanded=False):
 st.markdown("---")
 
 st.subheader("🕹️ Audit Control Panel")
-ctrl_col1, ctrl_col2 = st.columns(2)
+ctrl_col1 = st.columns(1)
 # File Upload Button
 with ctrl_col1:
     uploaded_file = st.file_uploader(
@@ -98,25 +98,18 @@ with ctrl_col1:
         type=["csv"],
         help="Upload the test_data.csv file to proceed."
     )
-# Model Selection Button
-with ctrl_col2:
-    selected_model_name = st.selectbox(
-        "2. Select Classifier for Audit", 
-        model_names
-    )
-st.markdown("---")
 
-# ---------------------------------------------------------------------------
-# UI Hard Stop
-# ---------------------------------------------------------------------------
+st.markdown("---")
+# default selection
+selected_model_name = "Logistic Regression"
+
+# Stop process if file is not uploaded yet
 if uploaded_file is None:
     st.info("👆 Please ingest `test_data.csv` using the control panel above.")
     st.stop()
 else:
     st.success(f"File '{uploaded_file.name}' successfully loaded into memory!.")
-    # Removed st.stop() here so the script can proceed to evaluation
 
- 
 # Load config from the newly defined data folder
 with open("data/Feature_Config.json") as f:
     config = json.load(f)
@@ -154,8 +147,14 @@ metrics = {
 tab1, tab2 = st.tabs(["🔍 Single Model Evaluation", "📊 Compare All Models"])
     
 with tab1:
+    model_selection = st.columns(1)
+    # Model Selection Button
+    with model_selection:
+        selected_model_name = st.selectbox(
+            "2. Select Classifier for Audit", 
+            model_names
+        )
     st.subheader(f"Classifier Audit Results: {selected_model_name}")
-    
     # Render metric headers
     col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
     cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
