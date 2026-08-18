@@ -143,7 +143,7 @@ metrics = {
     "MCC Score": matthews_corrcoef(y_true, y_pred),
 }
     
-st.subheader(f"Classifier Audit Results: Logistic Regression")
+st.subheader(f"Classifier Audit Results: {selected_model_name}")
     
 # Render metric headers
 col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)

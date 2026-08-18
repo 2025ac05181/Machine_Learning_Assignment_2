@@ -26,6 +26,7 @@
   "target_col": "credit_risk",
   "positive_label": "Bad",
   "model_files": {
-    "Logistic Regression": "logistic_regression.joblib"
+    "Logistic Regression": "logistic_regression.joblib",
+    "Decision Tree Classifier": "decision_tree.joblib"
   }
 }

@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import (accuracy_score, f1_score, matthews_corrcoef, precision_score, recall_score, roc_auc_score)
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -40,12 +41,14 @@ preprocessor = ColumnTransformer(
 
 models = {
     "Logistic Regression": LogisticRegression(max_iter=2000, random_state=RANDOM_STATE),
+    "Decision Tree Classifier": DecisionTreeClassifier(max_depth=6, random_state=RANDOM_STATE),
 }
 
 #Model Training and evaluation
 results = []
 filenames = {
     "Logistic Regression": "logistic_regression.joblib",
+    "Decision Tree Classifier": "decision_tree.joblib",
 }
 
 for name, clf in models.items():
