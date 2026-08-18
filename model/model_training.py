@@ -70,11 +70,11 @@ preprocessor = ColumnTransformer(
 )
 
 models = {
-    "Logistic Regression": LogisticRegression(max_iter=2000, random_state=RANDOM_STATE),
+    "Logistic Regression": LogisticRegression(C=0.1, max_iter=2000, random_state=RANDOM_STATE),
     "Decision Tree Classifier": DecisionTreeClassifier(max_depth=6, random_state=RANDOM_STATE),
-    "K-Nearest Neighbor Classifier": KNeighborsClassifier(n_neighbors=15),
-    "Naive Byes Classifier - Gaussian": GaussianNB(),
-    "Ensemble Model - Random Forest": RandomForestClassifier(n_estimators=300, max_depth=10, random_state=RANDOM_STATE),
+    "K-Nearest Neighbor Classifier": KNeighborsClassifier(n_neighbors=20),
+    "Naive Byes Classifier - Gaussian": GaussianNB(var_smoothing=0.1),
+    "Ensemble Model - Random Forest": RandomForestClassifier(n_estimators=400, max_depth=10, random_state=RANDOM_STATE),
 }
 
 #Model Training and evaluation
