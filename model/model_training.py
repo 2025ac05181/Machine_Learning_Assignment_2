@@ -7,6 +7,8 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (accuracy_score, f1_score, matthews_corrcoef, precision_score, recall_score, roc_auc_score)
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -32,7 +34,7 @@ y = (df[TARGET_COL] == POSITIVE_LABEL).astype(int)  # Bad=1, Good=0
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, stratify=y, random_state=RANDOM_STATE
 )
-
+ 
 preprocessor = ColumnTransformer(
     transformers=[
         ("num", StandardScaler(), numeric_features),
@@ -44,6 +46,8 @@ models = {
     "Logistic Regression": LogisticRegression(max_iter=2000, random_state=RANDOM_STATE),
     "Decision Tree Classifier": DecisionTreeClassifier(max_depth=6, random_state=RANDOM_STATE),
     "K-Nearest Neighbor Classifier": KNeighborsClassifier(n_neighbors=15),
+    "Naive Byes Classifier - Gaussian": GaussianNB(),
+    "Ensemble Model - Random Forest": RandomForestClassifier(n_estimators=300, max_depth=10, random_state=RANDOM_STATE),
 }
 
 #Model Training and evaluation
@@ -52,6 +56,8 @@ filenames = {
     "Logistic Regression": "logistic_regression.joblib",
     "Decision Tree Classifier": "decision_tree.joblib",
     "K-Nearest Neighbor Classifier": "knn.joblib",
+    "Naive Byes Classifier - Gaussian": "naive_bayes.joblib",
+    "Ensemble Model - Random Forest": "random_forest.joblib",
 }
 
 for name, clf in models.items():
@@ -73,7 +79,7 @@ for name, clf in models.items():
     results.append(metrics)
 
     joblib.dump(pipe, f"model/{filenames[name]}")
-    print(f"Trained {name:28s} | " + " | ".join(f"{k}={v:.3f}" for k, v in metrics.items() if k != "ML Model Name"))
+    print(f"Trained {name:32s} | " + " | ".join(f"{k}={v:.3f}" for k, v in metrics.items() if k != "ML Model Name"))
 
 # Model Comparison
 results_df = pd.DataFrame(results).round(4)

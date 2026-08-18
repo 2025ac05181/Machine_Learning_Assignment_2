@@ -2,3 +2,5 @@ ML Model Name,Accuracy,AUC,Precision,Recall,F1,MCC
 Logistic Regression,0.78,0.804,0.6667,0.5333,0.5926,0.4496
 Decision Tree Classifier,0.615,0.6417,0.3924,0.5167,0.446,0.1629
 K-Nearest Neighbor Classifier,0.755,0.7469,0.6667,0.3667,0.4731,0.3557
+Naive Byes Classifier - Gaussian,0.695,0.7411,0.4937,0.65,0.5612,0.3415
+Ensemble Model - Random Forest,0.775,0.7973,0.7143,0.4167,0.5263,0.4164

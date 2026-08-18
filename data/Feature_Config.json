@@ -28,6 +28,8 @@
   "model_files": {
     "Logistic Regression": "logistic_regression.joblib",
     "Decision Tree Classifier": "decision_tree.joblib",
-    "K-Nearest Neighbor Classifier": "knn.joblib"
+    "K-Nearest Neighbor Classifier": "knn.joblib",
+    "Naive Byes Classifier - Gaussian": "naive_bayes.joblib",
+    "Ensemble Model - Random Forest": "random_forest.joblib"
   }
 }
