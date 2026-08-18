@@ -98,7 +98,8 @@ with ctrl_col1:
         type=["csv"],
         help="Upload the test_data.csv file to proceed."
     )
-
+# Ingest data
+data = pd.read_csv(uploaded_file)
 st.markdown("---")
 # default selection
 selected_model_name = "Logistic Regression"
@@ -116,6 +117,31 @@ with open("data/Feature_Config.json") as f:
         
 TARGET_COL = config["target_col"]
 POSITIVE_LABEL = config["positive_label"]
+
+def evaluate_model(selected_model:str):
+    # Load model artifact
+    model_path = f"model/{config['model_files'][selected_model]}"
+    model = joblib.load(model_path)
+
+    if TARGET_COL not in data.columns:
+        st.error(f"Missing target column: '{TARGET_COL}' in the uploaded file.")
+        st.stop()
+    X = data.drop(columns=[TARGET_COL])
+    y_true = (data[TARGET_COL] == POSITIVE_LABEL).astype(int)    
+    # Generate predictions
+    y_pred = model.predict(X)
+    y_proba = model.predict_proba(X)[:, 1]
+    
+    # Compile metrics
+    metrics = {
+        "Accuracy": accuracy_score(y_true, y_pred),
+        "AUC Score": roc_auc_score(y_true, y_proba),
+        "Precision": precision_score(y_true, y_pred, zero_division=0),
+        "Recall": recall_score(y_true, y_pred, zero_division=0),
+        "F1 Score": f1_score(y_true, y_pred, zero_division=0),
+        "MCC Score": matthews_corrcoef(y_true, y_pred),
+    }
+    return y_true, y_pred, metrics
     
 
 tab1, tab2 = st.tabs(["🔍 Single Model Evaluation", "📊 Compare All Models"])
@@ -129,33 +155,7 @@ with tab1:
             model_names
         )
     st.subheader(f"Classifier Audit Results: {selected_model_name}")
-
-    # Load model artifact
-    model_path = f"model/{config['model_files'][selected_model_name]}"
-    lr_model = joblib.load(model_path)
-    # Ingest data
-    data = pd.read_csv(uploaded_file)
-
-    if TARGET_COL not in data.columns:
-        st.error(f"Missing target column: '{TARGET_COL}' in the uploaded file.")
-        st.stop()
-
-    X = data.drop(columns=[TARGET_COL])
-    y_true = (data[TARGET_COL] == POSITIVE_LABEL).astype(int)
-
-    # Generate predictions
-    y_pred = lr_model.predict(X)
-    y_proba = lr_model.predict_proba(X)[:, 1]
-
-    # Compile metrics
-    metrics = {
-        "Accuracy": accuracy_score(y_true, y_pred),
-        "AUC Score": roc_auc_score(y_true, y_proba),
-        "Precision": precision_score(y_true, y_pred, zero_division=0),
-        "Recall": recall_score(y_true, y_pred, zero_division=0),
-        "F1 Score": f1_score(y_true, y_pred, zero_division=0),
-        "MCC Score": matthews_corrcoef(y_true, y_pred),
-    }
+    y_true, y_pred, metrics = evaluate_model(selected_model=selected_model_name)
     # Render metric headers
     col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
     cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
@@ -189,3 +189,33 @@ with tab1:
             report_df.style.background_gradient(cmap="Blues", axis=0),
             use_container_width=True
         )
+
+with tab2:
+    st.subheader("All 5 Models on Uploaded Test Data")
+    rows = []
+    for model_name in model_names:
+        y_true, y_pred, metrics = evaluate_model(selected_model=model_name)
+        rows.append({"ML Model Name": model_name, **metrics})
+    comparison_df = pd.DataFrame(rows).round(4).sort_values("MCC Score", ascending=False)
+
+    st.dataframe(
+        comparison_df.style.highlight_max(
+            subset=["Accuracy", "AUC Score", "Precision", "Recall", "F1 Score", "MCC Score"], 
+            color="#1e4620"  # Deep Forest Green
+        ),
+        use_container_width=True,
+    )
+
+    metric_to_plot = st.selectbox(
+        "Chart metric", ["Accuracy", "AUC Score", "Precision", "Recall", "F1 Score", "MCC Score"]
+    )
+    fig2, ax2 = plt.subplots(figsize=(7, 3.5))
+    sns.barplot(
+        data=comparison_df, x="ML Model Name", y=metric_to_plot, ax=ax2, palette="viridis"
+    )
+    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=20, ha="right")
+    ax2.set_ylim(0, 1)
+    st.pyplot(fig2)
+
+    best_model = comparison_df.iloc[0]["ML Model Name"]
+    st.success(f"🏆 Best model on this data by MCC: **{best_model}**")
