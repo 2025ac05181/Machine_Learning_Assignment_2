@@ -90,7 +90,7 @@ with st.expander("📌 Audit System Protocol & Overview", expanded=False):
 st.markdown("---")
 
 st.subheader("🕹️ Audit Control Panel")
-ctrl_col1 = st.columns(1)
+ctrl_col1 = st.columns(1)[0]
 # File Upload Button
 with ctrl_col1:
     uploaded_file = st.file_uploader(
@@ -147,7 +147,7 @@ metrics = {
 tab1, tab2 = st.tabs(["🔍 Single Model Evaluation", "📊 Compare All Models"])
     
 with tab1:
-    model_selection = st.columns(1)
+    model_selection = st.columns(1)[0]
     # Model Selection Button
     with model_selection:
         selected_model_name = st.selectbox(
