@@ -150,39 +150,42 @@ metrics = {
     "F1 Score": f1_score(y_true, y_pred, zero_division=0),
     "MCC Score": matthews_corrcoef(y_true, y_pred),
 }
+
+tab1, tab2 = st.tabs(["🔍 Single Model Evaluation", "📊 Compare All Models"])
     
-st.subheader(f"Classifier Audit Results: {selected_model_name}")
+with tab1:
+    st.subheader(f"Classifier Audit Results: {selected_model_name}")
     
-# Render metric headers
-col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
-cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
-for col, (m_title, val) in zip(cols, metrics.items()):
-    col.metric(m_title, f"{val:.4f}")
+    # Render metric headers
+    col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
+    cols = [col_m1, col_m2, col_m3, col_m4, col_m5, col_m6]
+    for col, (m_title, val) in zip(cols, metrics.items()):
+        col.metric(m_title, f"{val:.4f}")
 
-st.markdown("---")
+    st.markdown("---")
 
-# Render visualizations
-col_viz1, col_viz2 = st.columns([1, 1.2])
+    # Render visualizations
+    col_viz1, col_viz2 = st.columns([1, 1.2])
 
-with col_viz1:
-    st.markdown("#### Confusion Matrix")
-    cm = confusion_matrix(y_true, y_pred)
-    fig, ax = plt.subplots(figsize=(4.5, 3.5))
-    sns.heatmap(
-        cm, annot=True, fmt="d", cmap="Blues", cbar=False,
-        xticklabels=["Predicted Good", "Predicted Bad"],
-        yticklabels=["Actual Good", "Actual Bad"], ax=ax
-    )
-    plt.tight_layout()
-    st.pyplot(fig)
+    with col_viz1:
+        st.markdown("#### Confusion Matrix")
+        cm = confusion_matrix(y_true, y_pred)
+        fig, ax = plt.subplots(figsize=(4.5, 3.5))
+        sns.heatmap(
+            cm, annot=True, fmt="d", cmap="Blues", cbar=False,
+            xticklabels=["Predicted Good", "Predicted Bad"],
+            yticklabels=["Actual Good", "Actual Bad"], ax=ax
+        )
+        plt.tight_layout()
+        st.pyplot(fig)
 
-with col_viz2:
-    st.markdown("#### Full Classification Report")
-    report_dict = classification_report(
-        y_true, y_pred, target_names=["Good Risk", "Bad Risk"], output_dict=True, zero_division=0
-    )
-    report_df = pd.DataFrame(report_dict).transpose().round(3)
-    st.dataframe(
-        report_df.style.background_gradient(cmap="Blues", axis=0),
-        use_container_width=True
-    )
+    with col_viz2:
+        st.markdown("#### Full Classification Report")
+        report_dict = classification_report(
+            y_true, y_pred, target_names=["Good Risk", "Bad Risk"], output_dict=True, zero_division=0
+        )
+        report_df = pd.DataFrame(report_dict).transpose().round(3)
+        st.dataframe(
+            report_df.style.background_gradient(cmap="Blues", axis=0),
+            use_container_width=True
+        )
