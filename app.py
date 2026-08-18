@@ -98,8 +98,6 @@ with ctrl_col1:
         type=["csv"],
         help="Upload the test_data.csv file to proceed."
     )
-# Ingest data
-data = pd.read_csv(uploaded_file)
 st.markdown("---")
 # default selection
 selected_model_name = "Logistic Regression"
@@ -110,6 +108,9 @@ if uploaded_file is None:
     st.stop()
 else:
     st.success(f"File '{uploaded_file.name}' successfully loaded into memory!.")
+
+# Ingest data
+data = pd.read_csv(uploaded_file)
 
 # Load config from the newly defined data folder
 with open("data/Feature_Config.json") as f:
@@ -201,7 +202,7 @@ with tab2:
     st.dataframe(
         comparison_df.style.highlight_max(
             subset=["Accuracy", "AUC Score", "Precision", "Recall", "F1 Score", "MCC Score"], 
-            color="#1e4620"  # Deep Forest Green
+            props="background-color: #c6f6d5; color: black;"
         ),
         use_container_width=True,
     )
