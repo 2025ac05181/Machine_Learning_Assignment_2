@@ -27,6 +27,7 @@
   "positive_label": "Bad",
   "model_files": {
     "Logistic Regression": "logistic_regression.joblib",
-    "Decision Tree Classifier": "decision_tree.joblib"
+    "Decision Tree Classifier": "decision_tree.joblib",
+    "K-Nearest Neighbor Classifier": "knn.joblib"
   }
 }

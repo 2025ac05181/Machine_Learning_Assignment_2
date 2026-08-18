@@ -6,6 +6,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import (accuracy_score, f1_score, matthews_corrcoef, precision_score, recall_score, roc_auc_score)
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -42,6 +43,7 @@ preprocessor = ColumnTransformer(
 models = {
     "Logistic Regression": LogisticRegression(max_iter=2000, random_state=RANDOM_STATE),
     "Decision Tree Classifier": DecisionTreeClassifier(max_depth=6, random_state=RANDOM_STATE),
+    "K-Nearest Neighbor Classifier": KNeighborsClassifier(n_neighbors=15),
 }
 
 #Model Training and evaluation
@@ -49,6 +51,7 @@ results = []
 filenames = {
     "Logistic Regression": "logistic_regression.joblib",
     "Decision Tree Classifier": "decision_tree.joblib",
+    "K-Nearest Neighbor Classifier": "knn.joblib",
 }
 
 for name, clf in models.items():
