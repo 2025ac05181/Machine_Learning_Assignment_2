@@ -6,7 +6,11 @@
     "present_residence_since",
     "age_years",
     "existing_credits_count",
-    "num_dependents"
+    "num_dependents",
+    "estimated_monthly_principal",
+    "credit_density_by_age",
+    "credit_per_person",
+    "residence_life_ratio"
   ],
   "categorical_features": [
     "checking_account_status",

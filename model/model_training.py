@@ -21,11 +21,38 @@ POSITIVE_LABEL = "Bad"
 #loading data
 df = pd.read_csv(DATA_PATH)
 
+def feature_engineering(data):
+    """
+    Synthesizes new behavioral clues from the raw evidence to improve model profiling.
+    """
+    engineered_df = data.copy()
+    
+    # 1. Estimated Monthly Burn Rate
+    engineered_df["estimated_monthly_principal"] = np.where(
+        engineered_df["duration_months"] > 0, 
+        engineered_df["credit_amount"] / engineered_df["duration_months"], 
+        engineered_df["credit_amount"]
+    )
+    
+    # 2. Credit Density by age
+    engineered_df["credit_density_by_age"] = engineered_df["existing_credits_count"] / engineered_df["age_years"]
+    
+    # 3. Dependency Stress i.e. credit per person 
+    engineered_df["credit_per_person"] = engineered_df["credit_amount"] / (engineered_df["num_dependents"] + 1)
+    
+    # 4. Rootedness Index
+    engineered_df["residence_life_ratio"] = engineered_df["present_residence_since"] / engineered_df["age_years"]
+    
+    return engineered_df
+
+df = feature_engineering(df)
 numeric_features = [
     "duration_months", "credit_amount", "installment_rate_pct",
     "present_residence_since", "age_years", "existing_credits_count",
-    "num_dependents",
+    "num_dependents", "estimated_monthly_principal", "credit_density_by_age", 
+    "credit_per_person", "residence_life_ratio"
 ]
+
 categorical_features = [c for c in df.columns if c not in numeric_features + [TARGET_COL]]
 
 X = df.drop(columns=[TARGET_COL])
